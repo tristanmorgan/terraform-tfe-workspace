@@ -28,7 +28,7 @@ https://www.terraform.io/docs/backends/types/remote.html#configuration-variables
         -reconfigure=true \
         -backend-config="organization=${var.tfe_org_id != "" ? var.tfe_org_id : element(concat(tfe_organization.org.*.id, list("")), 0)}" \
         -backend-config="token=${var.tfe_producer_team_id != "" ? "<PRODUCER_TEAM_TOKEN>" : element(concat(tfe_team_token.producer.*.token, list("")), 0)}" \
-        -backend-config="workspaces=[{name=\"${element(concat(tfe_workspace.producer.*.name, list("")), 0)}\"}]"
+        -backend-config="workspaces=[{name=\"${element(concat(tfe_workspace.producer.*.name, []), 0)}\"}]"
 ```
 
 You will see the below prompt, enter `yes`.
@@ -57,21 +57,21 @@ README
 }
 
 output "org_id" {
-  value       = "${var.tfe_org_id != "" ? var.tfe_org_id : element(concat(tfe_organization.org.*.id, list("")), 0)}"
+  value       = var.tfe_org_id != "" ? var.tfe_org_id : element(concat(tfe_organization.org.*.id, list("")), 0)
   description = "The TFE organization ID"
 }
 
 output "producer_team_id" {
-  value       = "${var.tfe_producer_team_id != "" ? var.tfe_producer_team_id : element(concat(tfe_team.producer.*.id, list("")), 0)}"
+  value       = var.tfe_producer_team_id != "" ? var.tfe_producer_team_id : element(concat(tfe_team.producer.*.id, list("")), 0)
   description = "The TFE Producer team ID"
 }
 
 output "consumer_team_id" {
-  value       = "${var.tfe_consumer_team_id != "" ? var.tfe_consumer_team_id : element(concat(tfe_team.consumer.*.id, list("")), 0)}"
+  value       = var.tfe_consumer_team_id != "" ? var.tfe_consumer_team_id : element(concat(tfe_team.consumer.*.id, list("")), 0)
   description = "The TFE Consumer team ID"
 }
 
 output "producer_workspace_id" {
-  value       = "${tfe_workspace.producer.id}"
+  value       = tfe_workspace.producer.id
   description = "The TFE Producer workspace ID"
 }
